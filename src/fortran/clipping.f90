@@ -1,4 +1,5 @@
 module sutherland_hodgman
+    use iso_c_binding
     implicit none
     
     type point
@@ -103,14 +104,15 @@ contains
     end function polygon_area
     
 
-    function clip_polygons(polygon, clipper) result(area)
+    function clip_polygons(polygon, clipper, n_max) result(area)
         type(point) :: r, s, a, b, p
         type(vector) :: U, N, V
         type(intersection_result) :: int_res
         integer, dimension(2) :: polygon_shape, clipper_shape
-        integer :: n_output, n_poly, n_clip, n_max, length, i, j
+        integer :: n_output, n_poly, n_clip, length, i, j
+        integer(kind=8) :: n_max
         real(kind=8), dimension(:, :) :: polygon, clipper
-        real(kind=8), dimension(2, 6):: output, subject
+        real(kind=8), dimension(2, n_max):: output, subject
         real(kind=8) :: area
         logical :: a_inside, b_inside
         
@@ -181,13 +183,13 @@ contains
     end function clip_polygons
     
 
-    subroutine area_of_intersection(ndim, nvertex, ntriangles, polygons, clippers, areas)
+    subroutine area_of_intersection(ndim, nvertex, ntriangles, polygons, clippers, areas) bind(c, name="area_of_intersection")
         !DEC$ ATTRIBUTES DLLEXPORT::area_of_intersection
-        integer(kind=8) :: ntriangles, nvertex, ndim, i
-        real(kind=8), dimension(ndim, nvertex, ntriangles), intent(in) :: polygons, clippers
-        real(kind=8), dimension(ntriangles), intent(out) :: areas
+        integer(c_int64_t) :: ntriangles, nvertex, ndim, i
+        real(c_double), dimension(ndim, nvertex, ntriangles), intent(in) :: polygons, clippers
+        real(c_double), dimension(ntriangles), intent(out) :: areas
         do i = 1, ntriangles
-            areas(i) = clip_polygons(polygons(:, :, i), clippers(:, :, i))
+            areas(i) = clip_polygons(polygons(:, :, i), clippers(:, :, i), nvertex * 2)
         end do
     end subroutine area_of_intersection
 
