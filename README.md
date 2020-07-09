@@ -18,9 +18,9 @@ checking for self-intersection and other degeneracies.
 
 ## Some benchmark results
 
-These tests deal with clipping set of N triangles by another set of N triangles.
-The coordinates for these triangles are randomly generated, in the x and
-y intervals [0, 1].
+These tests deal with clipping a set of N triangles by another set of N
+triangles. The coordinates for these triangles are randomly generated, in the x
+and y intervals [0, 1].
 
 ### Relative runtime for 100 000 intersections
 
@@ -90,13 +90,26 @@ gfortran -O2 -shared -static-libgfortran clipping.f90 -o gfortran_clipping.dll
 
 Use `iso_c_bindings` to get a consistent name. Gfortran mangles names
 differently from ifort, which also mangles names differently depending on
-whether you're on *nix or Windows.
+whether you're on *nix or Windows in terms of upper casing.
 
+### Calling the Fortran DLL
+
+A Fortran DLL effectively presents itself as a C library; in Julia it can be
+called with `ccall`, and `ctypes` can be used in Python. This also means that
+(like in C) you have to pass the shape of the arrays as arguments if you need
+the shape to be known (this wasn't immediately obvious to me since passing
+arrays around within Fortran is more straightforward).
+
+Secondly, `numpy` has `numpy.ctypeslib` with a couple of helper functions. The
+`argtypes` can be set with `numpy.ctypeslib.ndpointer`. Afterwards, arrays can
+be passed immediately (and will be checked), which is arguably more convenient
+and secure than calling `numpy.ctypeslib.as_ctypes()` for every array in the
+function call.
 
 ### C++ via Cython
 
-*Don't* give your extension the same name as your `.cpp` file -- Cython will
-overwrite it in generating its own `.cpp` file.
+*Don't* give your extension the same name as your `.cpp` file in the `setup.py`
+-- Cython will overwrite it while generating its own `.cpp` file!
 
 ### Performance
 
@@ -156,4 +169,5 @@ def method_using_intrinsics():
 ```
 
 The trouble is that the size of the array has to be a compile time constant --
-but Numba being JIT, compile time is basically runtime.
+but Numba being JIT, compile time is basically runtime; e.g. use a closure to
+return a JIT'ed function that allocates the required amount of memory.
