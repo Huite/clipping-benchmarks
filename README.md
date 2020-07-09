@@ -26,16 +26,16 @@ y intervals [0, 1].
 
 | Method          |   Relative runtime |
 |:----------------|-------------------:|
-| shapely         |         1440.36    |
-| pygeos          |          617.912   |
-| numba           |            7.20745 |
-| julia           |            3.13144 |
-| numba-parallel  |            2.71359 |
-| python-gfortran |            2.32708 |
-| julia-gfortran  |            2.14265 |
-| python-ifort    |            1.21428 |
-| julia-ifort     |            1.13889 |
-| cython-msvc-cpp |            1       |
+| shapely         |        1440.36     |
+| pygeos          |         617.912    |
+| numba           |           3.50484  |
+| julia           |           3.13144  |
+| python-gfortran |           2.32708  |
+| julia-gfortran  |           2.14265  |
+| python-ifort    |           1.21428  |
+| julia-ifort     |           1.13889  |
+| cython-msvc-cpp |           1        |
+| numba-parallel  |           0.661587 |
 
 ### Runtimes for increasing number of intersections
 
