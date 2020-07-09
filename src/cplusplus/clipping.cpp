@@ -37,7 +37,7 @@ IntersectionResult intersection(Point a, DVector V, Point r, DVector N) {
 }
 
 
-double polygon_area(std::vector<Point> polygon, int length) {
+double polygon_area(Point polygon[], int length) {
     double area = 0.0;
     Point a = polygon[0];
     Point b = polygon[1];
@@ -53,23 +53,22 @@ double polygon_area(std::vector<Point> polygon, int length) {
 }
 
 
-void copyto(std::vector<Point> src, std::vector<Point> dst, int n) {
+void copyto(Point src[], Point dst[], int n) {
     for (int i = 0; i < n; i++) {
         dst[i] = src[i];
     };
 };
 
 
-double clip_polygons(std::vector<Point> polygon, std::vector<Point> clipper, int n_max) {
-    std::vector<Point> subject(n_max), output(n_max);
+double clip_polygons(Point polygon[], Point clipper[], Point subject[], Point output[]) {
     Point r, s, a, b;
     DVector U, V, N;
     bool a_inside, b_inside;
     int n_poly, n_clip, n_output, length;
     IntersectionResult int_res;
 
-    n_poly = polygon.size();
-    n_clip = clipper.size();
+    n_poly = 3;
+    n_clip = 3;
     n_output = n_poly;
     for (int ii = 0; ii < n_output; ii++) {
         output[ii] = polygon[ii];
@@ -131,7 +130,7 @@ double clip_polygons(std::vector<Point> polygon, std::vector<Point> clipper, int
 }
 
 
-void cpp_area_of_intersection(
+void area_of_intersection(
     long ntriangles,
     long nvertex,
     long ndim,
@@ -140,7 +139,12 @@ void cpp_area_of_intersection(
     double* areas
 ) {
     long size = ndim * nvertex * ntriangles;
-    std::vector<Point> polygon(nvertex), clipper(nvertex);
+    // Allocate just once for working arrays
+    Point *polygon = new Point[nvertex]();
+    Point *clipper = new Point[nvertex]();
+    Point *subject = new Point[nvertex + nvertex]();
+    Point *output = new Point[nvertex + nvertex]();
+    
     for (auto i = 0; i < ntriangles; i++) {
         long start = i * 6;
         for (auto j = 0; j < nvertex; j++) {
@@ -149,6 +153,11 @@ void cpp_area_of_intersection(
             polygon[j] = { p[first], p[second] };
             clipper[j] = { c[first], c[second] };
         }
-        areas[i] = clip_polygons(polygon, clipper, 2 * nvertex);
+        areas[i] = clip_polygons(polygon, clipper, subject, output);
     }
+    // Delete working arrays
+    delete polygon;
+    delete clipper;
+    delete subject;
+    delete output;
 }
