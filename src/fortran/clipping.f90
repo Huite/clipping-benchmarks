@@ -93,7 +93,7 @@ contains
         a = point(polygon(1, 1), polygon(2, 1))
         b = point(polygon(1, 2), polygon(2, 2))
         U = vector(b%x - a%x, b%y - a%y)
-        do i = 1, length
+        do i = 3, length
             c = point(polygon(1, i), polygon(2, i))
             V = vector(a%x - c%x, a%y - c%y)
             area = area + abs(cross(U, V))
@@ -184,7 +184,7 @@ contains
     
 
     subroutine area_of_intersection(ndim, nvertex, ntriangles, polygons, clippers, areas) bind(c, name="area_of_intersection")
-        !DEC$ ATTRIBUTES DLLEXPORT::area_of_intersection
+        !DEC$ ATTRIBUTES DLLEXPORT :: area_of_intersection
         integer(c_int64_t) :: ntriangles, nvertex, ndim, i
         real(c_double), dimension(ndim, nvertex, ntriangles), intent(in) :: polygons, clippers
         real(c_double), dimension(ntriangles), intent(out) :: areas
