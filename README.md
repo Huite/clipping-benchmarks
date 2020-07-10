@@ -26,16 +26,16 @@ and y intervals [0, 1].
 
 | Method          |   Relative runtime |
 |:----------------|-------------------:|
-| shapely         |        1440.36     |
-| pygeos          |         617.912    |
-| numba           |           3.50484  |
-| julia           |           3.13144  |
-| python-gfortran |           2.32708  |
-| julia-gfortran  |           2.14265  |
-| python-ifort    |           1.21428  |
-| julia-ifort     |           1.13889  |
-| cython-msvc-cpp |           1        |
-| numba-parallel  |           0.661587 |
+| shapely         |         1343.98    |
+| pygeos          |          521.667   |
+| julia           |            3.09113 |
+| python-gfortran |            2.32293 |
+| julia-gfortran  |            2.07592 |
+| numba           |            1.35176 |
+| python-ifort    |            1.1382  |
+| julia-ifort     |            1.12967 |
+| cython-msvc-cpp |            1       |
+| numba-parallel  |            0.2371  |
 
 Output of `numba -s`:
 
@@ -61,8 +61,6 @@ System Name                                   : Windows
 Version                                       : 10.0.17134
 OS specific info                              : 1010.0.17134SP0
 ```
-
-
 
 ### Runtimes for increasing number of intersections
 
@@ -158,8 +156,7 @@ because `numba.prange` will not be able to parallellize if the arrays are shared
 
 Using a stack allocated array as presented
 [here](https://github.com/numba/numba/issues/5084) does make a significant
-difference, from ~7 to 3.5 relative runtime in serial, and ~2.4 to ~0.6 in
-parallel.
+difference, from cuttin runtime in half in serial, and much more so in parallel.
 
 ```
 import numpy as np
@@ -198,3 +195,7 @@ def method_using_intrinsics():
 The trouble is that the size of the array has to be a compile time constant --
 but Numba being JIT, compile time is basically runtime; e.g. use a closure to
 return a JIT'ed function that allocates the required amount of memory.
+
+In this particular case, Numba does not seem to inline aggressively enough by
+itself. Setting a decorators to `numba.njit(inline="always")` results in a
+factor ~3 speedup
