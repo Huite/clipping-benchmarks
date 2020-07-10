@@ -198,4 +198,4 @@ return a JIT'ed function that allocates the required amount of memory.
 
 In this particular case, Numba does not seem to inline aggressively enough by
 itself. Setting a decorators to `numba.njit(inline="always")` results in a
-factor ~3 speedup
+factor ~3 speedup.
