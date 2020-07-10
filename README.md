@@ -37,6 +37,33 @@ and y intervals [0, 1].
 | cython-msvc-cpp |           1        |
 | numba-parallel  |           0.661587 |
 
+Output of `numba -s`:
+
+```
+System info:
+--------------------------------------------------------------------------------
+__Time Stamp__
+2020-07-10 09:46:04.439609
+
+__Hardware Information__
+Machine                                       : AMD64
+CPU Name                                      : skylake
+CPU count                                     : 8
+CPU Features                                  : 
+64bit adx aes avx avx2 bmi bmi2 clflushopt cmov cx16 f16c fma fsgsbase invpcid
+lzcnt mmx movbe pclmul popcnt prfchw rdrnd rdseed sahf sgx sse sse2 sse3 sse4.1
+sse4.2 ssse3 xsave xsavec xsaveopt xsaves
+
+__OS Information__
+Platform                                      : Windows-10-10.0.17134-SP0
+Release                                       : 10
+System Name                                   : Windows
+Version                                       : 10.0.17134
+OS specific info                              : 1010.0.17134SP0
+```
+
+
+
 ### Runtimes for increasing number of intersections
 
 ![Runtime](./runtime.svg)
