@@ -1,0 +1,20 @@
+name: clipping-benchmarks
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - cython
+  - jupyterlab
+  - matplotlib
+  - nbconvert
+  - numba
+  - numpy
+  - pandas
+  - pip
+  - pip:
+      - maturin
+  - pygeos
+  - shapely
+  - tabulate
