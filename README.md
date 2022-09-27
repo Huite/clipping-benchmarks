@@ -79,6 +79,14 @@ triangles. However, the `area_of_intersection` functions currently only take
 rectangular arrays, so that assumptions has been baked in there. The
 `clip_polygons` functions should be able to deal with N vertices (not just 3).
 
+### Environment
+
+The python environment can be reproduced by running
+
+```
+mamba env create
+```
+
 ### Fortran on Windows
 
 On Windows, using Visual Studio, it's not entirely straightforward to call

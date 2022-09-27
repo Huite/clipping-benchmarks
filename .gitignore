@@ -1,0 +1,6 @@
+*.npy
+*.mod
+*.obj
+*.dll
+*.exp
+*.lib
